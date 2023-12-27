@@ -21,7 +21,7 @@ app.use(
   })
 );
 // Import User Routes
-app.use("/api/v1", router);
+app.use("/v1", router);
 
 app.listen(APP_PORT, () => {
   console.log(` app  on port ${APP_PORT}`);
