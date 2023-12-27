@@ -1,7 +1,7 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { User } from "../model/User.js";
 import chatSchema from "../model/chatSchema.js";
-
+import msgSchema from "../model/Message.js";
 import cloudinary from "cloudinary";
 
 cloudinary.v2.config({
@@ -92,45 +92,33 @@ export const FindChat = catchAsyncError(async (req, res, next) => {
       $or: [{ user: uid }, { other: uid }],
     });
 
-    // const chatsWithData = await Promise.all(
-    //   chats.map(async (data) => {
-    //     if (data.user == uid) {
-    //       const findPerson = await User.findById(data.user);
-    //       const findPerson1 = await User.findById(data.other).select(
-    //         "_id gallery name"
-    //       );
-    //       const chatWithPersonData = {
-    //         chatId: data._id,
-    //         userId: data.user,
-    //         other: findPerson1,
-    //         lastMessage: data.lastMessage,
-    //         unread: data.unread,
-    //         archive: data.archive,
-    //         mute: data.mute,
-    //       };
-    //       return chatWithPersonData;
-    //     } else {
-    //       const findPerson = await User.findById(data.user);
-    //       const findPerson1 = await User.findById(data.user).select(
-    //         "_id gallery name"
-    //       );
-    //       const chatWithPersonData = {
-    //         chatId: data._id,
-    //         userId: data.other,
-    //         other: findPerson1,
-    //         lastMessage: data.lastMessage,
-    //         unread: data.unread,
-    //         archive: data.archive,
-    //         mute: data.mute,
-    //       };
-    //       return chatWithPersonData;
-    //     }
-    //   })
-    // );
+    const chatsWithData = await Promise.all(
+      chats.map(async (data) => {
+        if (data.user == uid) {
+          const findPerson1 = await User.findById(data.other);
+          const chatWithPersonData = {
+            chatId: data._id,
+            userId: data.user,
+            other: findPerson1,
+            lastMessage: data.lastMessage,
+          };
+          return chatWithPersonData;
+        } else {
+          const findPerson1 = await User.findById(data.user);
+          const chatWithPersonData = {
+            chatId: data._id,
+            userId: data.other,
+            other: findPerson1,
+            lastMessage: data.lastMessage,
+          };
+          return chatWithPersonData;
+        }
+      })
+    );
 
     res.json({
       status: "success",
-      data: chats,
+      data: chatsWithData,
     });
   } catch (err) {
     console.log(err);
@@ -138,5 +126,14 @@ export const FindChat = catchAsyncError(async (req, res, next) => {
       status: "error",
       message: "invalid parameters",
     });
+  }
+});
+export const GetMessage = catchAsyncError(async (req, res, next) => {
+  const { chatId } = req.params;
+  try {
+    const result = await msgSchema.find({ chatId });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json(error);
   }
 });

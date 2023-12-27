@@ -10,6 +10,7 @@ const chatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    lastMessage: {},
   },
   {
     collection: "chats",
