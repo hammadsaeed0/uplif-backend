@@ -24,7 +24,7 @@ app.use(
 app.use("/v1", router);
 
 app.listen(APP_PORT, () => {
-  console.log(` app  on port ${APP_PORT}`);
+  console.log(`App  on port ${APP_PORT}`);
 });
 
 app.use(ErrorMiddleware);
