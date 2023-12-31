@@ -9,6 +9,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import chatSchema from "./model/chatSchema.js";
 import msgSchema from "./model/Message.js";
+import cors from "cors";
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
@@ -18,6 +19,7 @@ const io = new Server(server, {
 connectDB();
 
 // Use Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(
   express.urlencoded({
