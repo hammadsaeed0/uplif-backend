@@ -186,3 +186,35 @@ export const GetMessage = catchAsyncError(async (req, res, next) => {
     res.status(500).json(error);
   }
 });
+
+// Add User Images
+export const uploadImage = async (req, res, next) => {
+  let images = [];
+  if (req.files && req.files.avatars) {
+    if (!Array.isArray(req.files.avatars)) {
+      images.push(req.files.avatars);
+    } else {
+      images = req.files.avatars;
+    }
+  }
+  let responce = [];
+  for (const image of images) {
+    try {
+      const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+      const publidId = result.public_id;
+      const url = result.url;
+      let data = {
+        publidId,
+        url,
+      };
+      //  console.log(data);
+      responce.push(data);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Error uploading images" });
+    }
+  }
+  // console.log("-->1",responce);
+  //     res.json{responce , result}
+  res.send(responce);
+};
