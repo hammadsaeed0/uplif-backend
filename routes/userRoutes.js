@@ -8,6 +8,8 @@ import {
   UpdateUser,
   updateChat,
   uploadImage,
+  getUser,
+  deleteUser,
 } from "../controller/userController.js";
 import multer from "multer";
 const upload = multer({ dest: "uploads/" });
@@ -21,5 +23,7 @@ router.route("/FindChat").post(FindChat);
 router.route("/UpdateUser").post(UpdateUser);
 router.route("/updateChat").post(updateChat);
 router.route("/getMessage/:chatId").post(GetMessage);
+router.route("/getUser/:userId").get(getUser);
+router.route("/deleteUser/:userId").delete(deleteUser);
 router.route("/uploadImage", upload.array("avatars")).post(uploadImage);
 export default router;
