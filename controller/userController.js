@@ -36,6 +36,28 @@ export const register = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// Add User Phone Number
+export const UpdateUser = catchAsyncError(async (req, res, next) => {
+  try {
+    const { userId, newName } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name: newName },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // Get All User
 export const getAllUsers = catchAsyncError(async (req, res, next) => {
   try {
@@ -80,6 +102,32 @@ export const CreateChat = catchAsyncError(async (req, res, next) => {
   } catch (e) {
     console.log(e);
     return res.json({ status: "error", message: "Invalid parameters" });
+  }
+});
+
+// Create Chat
+export const updateChat = catchAsyncError(async (req, res, next) => {
+  try {
+    const { chatId, price, audioCallPrice, videoCallPrice } = req.body;
+
+    const updatedChat = await chatSchema.findByIdAndUpdate(
+      chatId,
+      {
+        price: price,
+        audioCallPrice: audioCallPrice,
+        videoCallPrice: videoCallPrice,
+      },
+      { new: true }
+    );
+
+    if (!updatedChat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    res.status(200).json(updatedChat);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -128,6 +176,7 @@ export const FindChat = catchAsyncError(async (req, res, next) => {
     });
   }
 });
+
 export const GetMessage = catchAsyncError(async (req, res, next) => {
   const { chatId } = req.params;
   try {

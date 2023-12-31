@@ -19,6 +19,11 @@ const userSchema = new Schema({
     // required: [true, "Please Enter Your Name"],
     default: "User",
   },
+  usertype: {
+    type: String,
+    enum: ["user", "supporter"],
+    default: "user",
+  },
   profileImage: {
     public_id: {
       type: String,
@@ -39,6 +44,7 @@ const userSchema = new Schema({
   },
   phoneNumber: {
     type: Number,
+    require: true,
   },
 });
 
