@@ -43,8 +43,17 @@ const userSchema = new Schema({
     default: Date.now,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     require: true,
+  },
+    chatPrice: {
+    type: String,
+  },
+    audioCallPrice: {
+    type: String,
+  },
+     videoCallPrice: {
+    type: String,
   },
 });
 
