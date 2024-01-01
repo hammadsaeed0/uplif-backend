@@ -15,7 +15,7 @@ export const register = catchAsyncError(async (req, res, next) => {
   // const { name, phoneNumber } = req.body;
   const data = req.body;
   const phoneNumber = data?.phoneNumber
-
+// console.log("body data ===", data);
   // Check if user with the same email already exists
   const existingUser = await User.findOne({ phoneNumber });
   if (existingUser) {
