@@ -12,7 +12,9 @@ cloudinary.v2.config({
 
 // Add User Phone Number
 export const register = catchAsyncError(async (req, res, next) => {
-  const { name, phoneNumber } = req.body;
+  // const { name, phoneNumber } = req.body;
+  const data = req.body;
+  const phoneNumber = data?.phoneNumber
 
   // Check if user with the same email already exists
   const existingUser = await User.findOne({ phoneNumber });
@@ -23,10 +25,7 @@ export const register = catchAsyncError(async (req, res, next) => {
       data: existingUser,
     });
   } else {
-    const newUser = await User.create({
-      name,
-      phoneNumber,
-    });
+    const newUser = await User.create(data);
 
     res.status(201).json({
       success: true,
