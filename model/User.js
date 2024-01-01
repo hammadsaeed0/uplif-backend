@@ -21,7 +21,6 @@ const userSchema = new Schema({
   },
   usertype: {
     type: String,
-    enum: ["user", "supporter"],
     default: "user",
   },
   profileImage: {
@@ -48,12 +47,15 @@ const userSchema = new Schema({
   },
     chatPrice: {
     type: String,
+        default: "",
   },
     audioCallPrice: {
     type: String,
+        default: "",
   },
      videoCallPrice: {
     type: String,
+         default: "user",
   },
 });
 
