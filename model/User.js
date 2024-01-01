@@ -55,7 +55,7 @@ const userSchema = new Schema({
   },
      videoCallPrice: {
     type: String,
-         default: "user",
+         default: "",
   },
 });
 
