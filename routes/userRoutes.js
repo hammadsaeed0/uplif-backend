@@ -22,7 +22,7 @@ router.route("/CreateChat").post(CreateChat);
 router.route("/FindChat").post(FindChat);
 router.route("/UpdateUser").post(UpdateUser);
 router.route("/updateChat").post(updateChat);
-router.route("/getMessage/:chatId").post(GetMessage);
+router.route("/getMessage").post(GetMessage);
 router.route("/getUser/:userId").get(getUser);
 router.route("/deleteUser/:userId").delete(deleteUser);
 router.route("/uploadImage", upload.array("avatars")).post(uploadImage);

@@ -12,9 +12,13 @@ import msgSchema from "./model/Message.js";
 import cors from "cors";
 const server = createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "*",
+    cors: {
+    origin: "http://13.40.11.117:8000",
+    methods: ["GET", "POST"],
   },
+  // cors: {
+  //   origin: "*",
+  // },
 });
 connectDB();
 
@@ -35,6 +39,7 @@ app.use(
 app.use("/v1", router);
 
 io.on("connection", (socket) => {
+  console.log("user coneected ===");
   socket.on("sendMessage", async (data) => {
     try {
       const chatId = data.chatId;

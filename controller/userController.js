@@ -14,8 +14,8 @@ cloudinary.v2.config({
 export const register = catchAsyncError(async (req, res, next) => {
   // const { name, phoneNumber } = req.body;
   const data = req.body;
-  const phoneNumber = data?.phoneNumber
-// console.log("body data ===", data);
+  const phoneNumber = data?.phoneNumber;
+  // console.log("body data ===", data);
   // Check if user with the same email already exists
   const existingUser = await User.findOne({ phoneNumber });
   if (existingUser) {
@@ -177,12 +177,15 @@ export const FindChat = catchAsyncError(async (req, res, next) => {
 });
 
 export const GetMessage = catchAsyncError(async (req, res, next) => {
-  const { chatId } = req.params;
   try {
+    const { chatId } = req.body;
+
     const result = await msgSchema.find({ chatId });
+
     res.status(200).json(result);
   } catch (error) {
-    res.status(500).json(error);
+    console.error("Error in GetMessage:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
