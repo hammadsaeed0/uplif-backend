@@ -2,6 +2,7 @@ import express from "express";
 import { connectDB } from "./config/database.js";
 const app = express();
 import { APP_PORT } from "./config/index.js";
+import customerRoute from "./routes/customerRoutes.js";
 import router from "./routes/userRoutes.js";
 import ErrorMiddleware from "./middleware/Error.js";
 import fileupload from "express-fileupload";
@@ -12,13 +13,9 @@ import msgSchema from "./model/Message.js";
 import cors from "cors";
 const server = createServer(app);
 const io = new Server(server, {
-    cors: {
-    origin: "http://13.40.11.117:8000",
-    methods: ["GET", "POST"],
+  cors: {
+    origin: "*",
   },
-  // cors: {
-  //   origin: "*",
-  // },
 });
 connectDB();
 
@@ -37,6 +34,7 @@ app.use(
 );
 // Import User Routes
 app.use("/v1", router);
+app.use("/customer", customerRoute);
 
 io.on("connection", (socket) => {
   console.log("user coneected ===");
