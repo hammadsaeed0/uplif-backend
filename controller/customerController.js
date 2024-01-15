@@ -1,7 +1,7 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Customer } from "../model/customer.js";
 import { RideCategory } from "../model/RideCategories.js";
-
+import { FoodCategory } from "../model/foodcategory.js";
 // register user
 export const register = catchAsyncError(async (req, res, next) => {
   const data = req.body;
@@ -106,6 +106,43 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+    });
+  }
+});
+
+// food categories
+export const createFoodCategory = catchAsyncError(async (req, res, next) => {
+  const data = req.body;
+  const name = data?.name;
+  const existCategory = await FoodCategory.findOne({ name });
+  if (existCategory) {
+    res
+      .status(400)
+      .json({ message: "This ride category already exist", status: "fail" });
+  } else {
+    const newCategory = await FoodCategory.create(data);
+
+    res.status(200).json({
+      status: "success",
+      message: "Category created successfully",
+      data: newCategory,
+    });
+  }
+});
+
+//  get All food Categories
+export const getAllFoodCategories = catchAsyncError(async (req, res, next) => {
+  try {
+    const categories = await FoodCategory.find();
+    res.status(200).json({
+      status: "success",
+      data: categories,
     });
   } catch (error) {
     console.error("Error fetching users:", error);
