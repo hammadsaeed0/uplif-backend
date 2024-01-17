@@ -14,6 +14,7 @@ import { Customer } from "./model/customer.js";
 // const { ObjectId } = require("mongodb");
 import { ObjectId } from "mongodb";
 import { Captain } from "./model/CaptainSchema.js";
+import {User} from './model/User.js'
 connectDB();
 
 // Use Middlewares
@@ -43,6 +44,21 @@ const io = new Server(8086, {
 
 io.on("connection", (socket) => {
   console.log("A user connected");
+  socket.on("sendMessage", async (data) => {
+    try {
+      const otherid = data?.other;
+      console.log("other id ==", otherid);
+      const userData = await User.findOne({ otherid });
+      console.log("other user data ===",userData);
+      const finalobj = {
+        data: data,
+        user: userData
+      };
+      socket.emit("recieveMessage", { status: "success", data: finalobj });
+    } catch (error) {
+      console.log("error", error);
+    }
+  });
   socket.on("newRide", async (data, cb) => {
     try {
       const category = data?.categoryId;
@@ -76,7 +92,7 @@ io.on("connection", (socket) => {
         bidData: data,
         userData: userData,
         driverData: driverData,
-        categoryData:categoryData,
+        categoryData: categoryData,
       };
       socket.emit("acceptedForUsers", { status: "success", data: finalData });
       // console.log(result);
