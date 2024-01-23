@@ -57,9 +57,9 @@ io.on("connection", (socket) => {
     try {
       const category = data?.categoryId;
       const userId = data?.userId;
-      const categoryData = await RideCategory.findOne({ category });
+      const categoryData = await RideCategory.findById(category);
 
-      const userData = await Customer.findOne({ userId });
+      const userData = await Customer.findById(userId);
       console.log("categoryData form  ===", categoryData);
       console.log("userData form ===", userData);
       const finalData = {
@@ -67,70 +67,93 @@ io.on("connection", (socket) => {
         userData: userData,
         categoryData: categoryData,
       };
-      socket.emit("bidsForDrivers", { status: "success", data: finalData });
+
+      io.sockets.emit("bidsForDrivers", {
+        status: "success",
+        data: finalData,
+      });
       cb({ status: "success", data: data });
     } catch (error) {
       cb({ status: "error", message: error.message });
+      console.log("response from error ==", error);
     }
   });
   socket.on("acceptBidForUsers", async (data, cb) => {
     try {
       const driverId = data.driverId;
-      console.log("driverId form  ===", driverId);
       const category = data?.categoryId;
       const userId = data?.userId;
-      const categoryData = await RideCategory.findOne({ category });
-      const driverData = await Captain.findOne({ driverId });
-      const userData = await Customer.findOne({ userId });
+      const categoryData = await RideCategory.findById(category);
+      const driverData = await Captain.findById(driverId);
+      const userData = await Customer.findById(userId);
+      console.log("category id  ===", categoryData);
+      console.log("driverId form  ===", driverData);
+
       const finalData = {
         bidData: data,
         userData: userData,
         driverData: driverData,
         categoryData: categoryData,
       };
-      socket.emit("acceptedForUsers", { status: "success", data: finalData });
+      io.sockets.emit("acceptedForUsers", {
+        status: "success",
+        data: finalData,
+      });
       // console.log(result);
-      cb({ status: "success", data: data });
+      // cb({ status: "success", data: finalData });
     } catch (error) {
-      cb({ status: "error", message: error.message });
-      // console.log(error, ";;;;;;;;;;;;;");
+      // cb({ status: "error", message: error.message });
+      console.log(error, ";;;;;;;;;;;;;");
     }
   });
   socket.on("acceptRequestForDrivers", async (data, cb) => {
     try {
       const driverId = new ObjectId(data.driverId);
       const userId = new ObjectId(data?.userId);
-      const driverData = Captain.findOne({ driverId });
-      const userData = Customer.findOne({ userId });
+      const driverData = await Captain.findById(driverId);
+      const userData = await Customer.findById(userId);
       const finalData = {
         bidData: data,
         userData: userData,
         driverData: driverData,
       };
-      socket.emit("acceptedForDrivers", { status: "success", data: finalData });
-      // console.log(result);
+      console.log(finalData);
+
+      io.sockets.emit("acceptedForDrivers", {
+        status: "success",
+        data: finalData,
+      });
       cb({ status: "success", data: data });
     } catch (error) {
       cb({ status: "error", message: error.message });
       // console.log(error, ";;;;;;;;;;;;;");
     }
   });
-  // socket.on("orderCompleted", async (data, cb) => {
-  //   try {
-  //     let order = await PharmacyOrder.findByIdAndUpdate(data.id, {
-  //       OrderStatus: "completed",
-  //     });
-  //     // console.log(result);
-  //     cb({ status: "success", data: order });
-  //     // console.log(result, ";;;;;;;;;;;;;;");
-
-  //     pharmacyNsp.emit("orderCompleted", { status: "success", data: order });
-  //     console.log("acceptBid", "success");
-  //   } catch (error) {
-  //     cb({ status: "error", message: error.message });
-  //     // console.log(error, ";;;;;;;;;;;;;");
-  //   }
-  // });
+  socket.on("startRide", async (data, cb) => {
+    try {
+      const driverId = data.driverId;
+      const obj = {
+        driverId: driverId,
+      };
+      io.sockets.emit("startRide", obj);
+    } catch (error) {
+      cb({ status: "error", message: error.message });
+      // console.log(error, ";;;;;;;;;;;;;");
+    }
+  });
+  socket.on("endRide", async (data, cb) => {
+    try {
+      const driverId = data.driverId;
+      const obj = {
+        driverId: driverId,
+      };
+      io.sockets.emit("endRide", obj);
+      cb({ status: "success" });
+    } catch (error) {
+      cb({ status: "error", message: error.message });
+      // console.log(error, ";;;;;;;;;;;;;");
+    }
+  });
   // socket.on("cancelOrder", async (data, cb) => {
   //   try {
   //     let order = await PharmacyOrder.findByIdAndUpdate(data.id, {
