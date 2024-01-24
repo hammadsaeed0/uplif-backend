@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ResturantScheme = new Schema({
+const FoodScheme = new Schema({
   name: {
     type: String,
     require: true,
@@ -19,22 +19,24 @@ const ResturantScheme = new Schema({
     type: Date,
     default: Date.now,
   },
-  type: {
+  offer: {
     type: String,
-    require: true,
   },
   description: {
     type: String,
   },
-  deliveryTime: {
+  actualPrice: {
     type: String,
   },
-  startingPrice: {
+  finalPrice: {
     type: String,
   },
-  location: {
+  resturantId:{
     type: String,
   },
+  dealId:{
+    type: String,
+  }
 });
 
-export const Resturants = mongoose.model("Resturants", ResturantScheme);
+export const Foods = mongoose.model("Foods", FoodScheme);

@@ -2,6 +2,9 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Customer } from "../model/customer.js";
 import { RideCategory } from "../model/RideCategories.js";
 import { FoodCategory } from "../model/foodcategory.js";
+import { Resturants } from "../model/Resturants.js";
+import { ResturantDeals } from "../model/Resturantdeals.js";
+import { Foods } from "../model/food.js";
 // register user
 export const register = catchAsyncError(async (req, res, next) => {
   const data = req.body;
@@ -151,4 +154,86 @@ export const getAllFoodCategories = catchAsyncError(async (req, res, next) => {
       error: "Internal Server Error",
     });
   }
+});
+
+export const CreateResturant = catchAsyncError(async (req, res, next) => {
+  const data = req.body;
+  const name = data?.name;
+  const existingRes = await Resturants.findOne({ name });
+  if (existingRes) {
+    res.status(400).json({
+      message: "This name of resturant already exist",
+      status: "fail",
+    });
+  } else {
+    const newRes = await Resturants.create(data);
+
+    res.status(200).json({
+      status: "success",
+      message: "Resturant created successfully",
+      data: newRes,
+    });
+  }
+});
+export const getAllResturant = catchAsyncError(async (req, res, next) => {
+  try {
+    const resturants = await Resturants.find();
+    res.status(200).json({
+      status: "success",
+      data: resturants,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+    });
+  }
+});
+
+export const CreateResturantDeals = catchAsyncError(async (req, res, next) => {
+  const data = req.body;
+
+  const newRes = await ResturantDeals.create(data);
+
+  res.status(200).json({
+    status: "success",
+    message: "Resturant Deals created successfully",
+    data: newRes,
+  });
+});
+
+export const FindDealsByResId = catchAsyncError(async (req, res, next) => {
+  const { resturantId } = req.body;
+
+  const matchingDeals = await ResturantDeals.find({ resturantId });
+
+  res.status(200).json({
+    status: "success",
+    message: "Restaurant Deals retrieved successfully",
+    data: matchingDeals,
+  });
+});
+
+export const CreateFood = catchAsyncError(async (req, res, next) => {
+  const data = req.body;
+
+  const newRes = await Foods.create(data);
+
+  res.status(200).json({
+    status: "success",
+    message: "Resturant created successfully",
+    data: newRes,
+  });
+});
+export const FindFoodsByResId = catchAsyncError(async (req, res, next) => {
+  const { resturantId } = req.body;
+
+  const matchingDeals = await Foods.find({ resturantId });
+
+  res.status(200).json({
+    status: "success",
+    message: "Food retrieved successfully",
+    data: matchingDeals,
+  });
 });
