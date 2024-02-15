@@ -30,18 +30,21 @@ export const register = catchAsyncError(async (req, res, next) => {
   }
 });
 export const login = catchAsyncError(async (req, res, next) => {
+  const data = req.body;
   const phoneNumber = data?.phoneNumber;
 
   const existingUser = await User.findOne({ phoneNumber });
   if (existingUser) {
     res.status(201).json({
       success: true,
+      status:200,
       message: "User login successfully",
       data: existingUser,
     });
   } else {
     res.status(201).json({
       success: false,
+      status:201,
       message: "User not found",
     });
   }
