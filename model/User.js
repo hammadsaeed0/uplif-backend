@@ -48,14 +48,19 @@ const userSchema = new Schema({
     enum: ["available", "notavailable"], // Specify the allowed values
     default: "available",
   },
-  walletAmount: {
-    type: String,
-    default: "0.00",
+  walletAmount:{
+    type:String,
+    default:"0.00",
   },
   profileImage: {
-    type: String,
-    default:
-      "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
+    public_id: {
+      type: String,
+    },
+    url: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
+    },
   },
   isVerified: {
     type: Boolean,
