@@ -21,17 +21,41 @@ const userSchema = new Schema({
   },
   usertype: {
     type: String,
+    enum: ["male", "supporter"],
     default: "user",
   },
+  gender: {
+    type: String,
+    enum: ["male", "female", "null"], // Specify the allowed values
+    default: "null", // Initial value is 'pending'
+  },
+  age: {
+    type: String,
+    default: "",
+  },
+  audioCall: {
+    type: String,
+    enum: ["available", "notavailable"], // Specify the allowed values
+    default: "available",
+  },
+  videoCall: {
+    type: String,
+    enum: ["available", "notavailable"], // Specify the allowed values
+    default: "available",
+  },
+  chat: {
+    type: String,
+    enum: ["available", "notavailable"], // Specify the allowed values
+    default: "available",
+  },
+  walletAmount: {
+    type: String,
+    default: "0.00",
+  },
   profileImage: {
-    public_id: {
-      type: String,
-    },
-    url: {
-      type: String,
-      default:
-        "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
-    },
+    type: String,
+    default:
+      "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
   },
   isVerified: {
     type: Boolean,
@@ -45,17 +69,17 @@ const userSchema = new Schema({
     type: String,
     require: true,
   },
-    chatPrice: {
+  chatPrice: {
     type: String,
-        default: "",
+    default: "",
   },
-    audioCallPrice: {
+  audioCallPrice: {
     type: String,
-        default: "",
+    default: "",
   },
-     videoCallPrice: {
+  videoCallPrice: {
     type: String,
-         default: "",
+    default: "",
   },
 });
 

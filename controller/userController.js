@@ -10,13 +10,28 @@ cloudinary.v2.config({
   api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
 });
 
-// Add User Phone Number
 export const register = catchAsyncError(async (req, res, next) => {
-  // const { name, phoneNumber } = req.body;
   const data = req.body;
   const phoneNumber = data?.phoneNumber;
-  // console.log("body data ===", data);
-  // Check if user with the same email already exists
+  const existingUser = await User.findOne({ phoneNumber });
+  if (existingUser) {
+    res.status(200).json({
+      success: false,
+      message: "This phone number already exist",
+    });
+  } else {
+    const newUser = await User.create(data);
+
+    res.status(200).json({
+      success: true,
+      message: "User registered successfully",
+      data: newUser,
+    });
+  }
+});
+export const login = catchAsyncError(async (req, res, next) => {
+  const phoneNumber = data?.phoneNumber;
+
   const existingUser = await User.findOne({ phoneNumber });
   if (existingUser) {
     res.status(201).json({
@@ -25,16 +40,12 @@ export const register = catchAsyncError(async (req, res, next) => {
       data: existingUser,
     });
   } else {
-    const newUser = await User.create(data);
-
     res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: newUser,
+      success: false,
+      message: "User not found",
     });
   }
 });
-
 // Add User Phone Number
 export const UpdateUser = catchAsyncError(async (req, res, next) => {
   try {
