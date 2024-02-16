@@ -16,7 +16,6 @@ const GalleryItemSchema = new Schema({
 const userSchema = new Schema({
   name: {
     type: String,
-    // required: [true, "Please Enter Your Name"],
     default: "User",
   },
   usertype: {
@@ -48,19 +47,14 @@ const userSchema = new Schema({
     enum: ["available", "notavailable"], // Specify the allowed values
     default: "available",
   },
-  walletAmount:{
-    type:String,
-    default:"0.00",
+  walletAmount: {
+    type: String,
+    default: "0.00",
   },
   profileImage: {
-    public_id: {
-      type: String,
-    },
-    url: {
-      type: String,
-      default:
-        "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
-    },
+    type: String,
+    default:
+      "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
   },
   isVerified: {
     type: Boolean,
@@ -85,6 +79,10 @@ const userSchema = new Schema({
   videoCallPrice: {
     type: String,
     default: "",
+  },
+  appliedCoupon: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Coupon',
   },
 });
 

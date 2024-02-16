@@ -11,6 +11,8 @@ import {
   getUser,
   deleteUser,
   login,
+  CreateCoupon,
+  ApplyCoupon,
 } from "../controller/userController.js";
 import multer from "multer";
 const upload = multer({ dest: "uploads/" });
@@ -28,4 +30,7 @@ router.route("/getMessage").post(GetMessage);
 router.route("/getUser/:userId").get(getUser);
 router.route("/deleteUser/:userId").delete(deleteUser);
 router.route("/uploadImage", upload.array("avatars")).post(uploadImage);
+router.route("/coupon").post(CreateCoupon);
+router.route("/coupon/apply").post(ApplyCoupon);
+
 export default router;

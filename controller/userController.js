@@ -3,7 +3,7 @@ import { User } from "../model/User.js";
 import chatSchema from "../model/chatSchema.js";
 import msgSchema from "../model/Message.js";
 import cloudinary from "cloudinary";
-
+import { Coupon } from "../model/coupon.js";
 cloudinary.v2.config({
   cloud_name: "ddu4sybue",
   api_key: "658491673268817",
@@ -15,9 +15,15 @@ export const register = catchAsyncError(async (req, res, next) => {
   const phoneNumber = data?.phoneNumber;
   const existingUser = await User.findOne({ phoneNumber });
   if (existingUser) {
-    res.status(200).json({
-      success: false,
-      message: "This phone number already exist",
+    // res.status(200).json({
+    //   success: false,
+    //   message: "This phone number already exist",
+    // });
+    res.status(201).json({
+      success: true,
+      status: 200,
+      message: "User login successfully",
+      data: existingUser,
     });
   } else {
     const newUser = await User.create(data);
@@ -37,14 +43,14 @@ export const login = catchAsyncError(async (req, res, next) => {
   if (existingUser) {
     res.status(201).json({
       success: true,
-      status:200,
+      status: 200,
       message: "User login successfully",
       data: existingUser,
     });
   } else {
     res.status(201).json({
       success: false,
-      status:201,
+      status: 201,
       message: "User not found",
     });
   }
@@ -270,3 +276,50 @@ export const deleteUser = async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const CreateCoupon = catchAsyncError(async (req, res, next) => {
+  try {
+    const { code, discount } = req.body;
+    const coupon = new Coupon({ code, discount });
+    await coupon.save();
+    res.status(201).json({
+      status: "success",
+      message: "Coupon created successfully!",
+      data: coupon,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+export const ApplyCoupon = catchAsyncError(async (req, res, next) => {
+  try {
+    const { userId, code } = req.body;
+
+    const user = await User.findById(userId);
+    const coupon = await Coupon.findOne({ code });
+
+    if (!user || !coupon) {
+      return res.status(404).json({ error: "User or coupon not found" });
+    }
+
+    if (coupon.usersUsed.length >= 5) {
+      return res.status(400).json({ error: "Coupon usage limit reached" });
+    }
+
+    if (user.appliedCoupon) {
+      return res
+        .status(400)
+        .json({ error: "User has already applied a coupon" });
+    }
+
+    user.appliedCoupon = coupon._id;
+    await user.save();
+
+    coupon.usersUsed.push(user._id);
+    await coupon.save();
+
+    res.json({ message: "Coupon applied successfully", status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
