@@ -134,13 +134,21 @@ export const CreateChat = catchAsyncError(async (req, res, next) => {
         message: "Chat is already available",
       });
     }
+
+    const otherData = await User.findOne({ _id: other });
     let chat = await chatSchema.create({
       user,
       other,
     });
+    const sendingData = {
+      chatId: chat?._id,
+      userId: chat?.user,
+      other: otherData,
+    };
+
     res.json({
       status: "success",
-      data: chat,
+      data: sendingData,
     });
   } catch (e) {
     console.log(e);
