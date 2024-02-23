@@ -72,6 +72,10 @@ const userSchema = new Schema({
     type: String,
     default: "",
   },
+  story: {
+    type: String,
+    default: "",
+  },
   audioCallPrice: {
     type: String,
     default: "",

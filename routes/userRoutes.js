@@ -14,6 +14,7 @@ import {
   CreateCoupon,
   ApplyCoupon,
   UpdateAvailablity,
+  UpdateStory,
 } from "../controller/userController.js";
 import multer from "multer";
 const upload = multer({ dest: "uploads/" });
@@ -28,6 +29,7 @@ router.route("/FindChat").post(FindChat);
 router.route("/UpdateUser").post(UpdateUser);
 router.route("/UpdateUser").post(UpdateUser);
 router.route("/updateAvailability").put(UpdateAvailablity);
+router.route("/updateStory").put(UpdateStory);
 router.route("/getMessage").post(GetMessage);
 router.route("/getUser/:userId").get(getUser);
 router.route("/deleteUser/:userId").delete(deleteUser);
