@@ -18,6 +18,10 @@ const userSchema = new Schema({
     type: String,
     default: "User",
   },
+  nickName: {
+    type: String,
+    default: "User",
+  },
   usertype: {
     type: String,
     enum: ["user", "supporter"],
