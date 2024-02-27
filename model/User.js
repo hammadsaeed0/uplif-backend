@@ -57,8 +57,7 @@ const userSchema = new Schema({
   },
   profileImage: {
     type: String,
-    default:
-      "https://res.cloudinary.com/ddu4sybue/image/upload/v1703621151/default_kg8cg0.png",
+    default: "",
   },
   isVerified: {
     type: Boolean,
@@ -90,7 +89,7 @@ const userSchema = new Schema({
   },
   appliedCoupon: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Coupon',
+    ref: "Coupon",
   },
 });
 

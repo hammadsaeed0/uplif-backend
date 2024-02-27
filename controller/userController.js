@@ -171,13 +171,6 @@ export const CreateChat = catchAsyncError(async (req, res, next) => {
         { user: user, other: other },
       ],
     });
-    if (old != null) {
-      return res.json({
-        status: "error",
-        message: "Chat is already available",
-      });
-    }
-
     const otherData = await User.findOne({ _id: other });
     let chat = await chatSchema.create({
       user,
@@ -188,6 +181,13 @@ export const CreateChat = catchAsyncError(async (req, res, next) => {
       userId: chat?.user,
       other: otherData,
     };
+    if (old != null) {
+      return res.json({
+        status: "error",
+        message: "Chat is already available",
+        data: sendingData,
+      });
+    }
 
     res.json({
       status: "success",
